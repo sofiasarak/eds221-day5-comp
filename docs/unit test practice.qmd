@@ -13,12 +13,13 @@ execute:
 
 First, install and load necessary packages
 ```{r}
-#| include: false
+#| warnings: false
 
 #install.packages("testthat")
 #install.packages("devtools")
 #install.packages("remotes") ; commented out because you don't want R to try to install them every time!!
 
+rm(list=ls()) #clearing global environment
 library(testthat)
 library(devtools)
 library(remotes)
@@ -56,5 +57,16 @@ expect_length(mean_range(df=mtcars), 2)
 
 #test that first value is less than second value
 expect_true(mean_range(mtcars)[1] < mean_range(mtcars)[2]) #first output of mean_range(mtcars) vs second output of mean_range(mtcars), because it returns a vector!
+```
+
+
+## Practice sourcing functions
+```{r}
+#source our food cart functions
+source(here::here("src","foodcartfunctions.R")) #puts function into our global enviro!
+#sourcing can run an entire script and put everything made into our local enviro and workflow
+
+#test running function
+name_cart(food="strawberry", animal="marmot")
 ```
 
