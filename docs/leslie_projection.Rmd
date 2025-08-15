@@ -4,7 +4,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE) #telling R not to show messages in knitted version (same as #| in Quarto)
 library(tidyverse)
 ```
 
@@ -43,27 +43,29 @@ Add line-by-line comments wheres prompted in the code below, explaining what eac
 # ------ WHAT HAPPENS HERE? ------ #
 # ------ comment line-by-line ---- #
 
-# The line below...
+# Making a time vector for what we will project populations size over 
 time_yr <- seq(from = 0, to = 8, by = 1)
 
-# The line below...
+# Making a blank matrix with same dimensions as initial pop structure (x) and time vector (y)
 proj_year <- matrix(ncol = length(fish_year0), nrow = length(time_yr))
 
-# The line below...
+# Storing the initial conditions in the output matrix; populating first row with year 0 population sizes
 proj_year[1, ] <- fish_year0
 
-# The for loop below...
-for (i in 2:length(time_yr)) {
-  proj_year[i,] <- fish_leslie %*% proj_year[i-1,]
+# The for loop below projects the future years based on the year before
+for (i in 2:length(time_yr)) { #have full control over what i is, can be length(time_yr)-1
+  proj_year[i,] <- fish_leslie %*% proj_year[i-1,] #taking the dot product of leslie matrix and previous year's conditions; and stores it into our blank matrix!
 }
 
 
 # The rest is wrangling & visualization (run to check it out):
-colnames(proj_year) <- c("eggs", "fry", "juvenile", "adult")
+colnames(proj_year) <- c("eggs", "fry", "juvenile", "adult") #sets column names of matrix; for pop stages
 
+#convert matrix into data frame; adds time sequence as well; and pivot longer!
 proj_df <- data.frame(time_yr, proj_year) %>% 
   pivot_longer(cols = -time_yr, names_to = "lifestage", values_to = "stage_population")
 
+#and plot!
 ggplot(data = proj_df, aes(x = time_yr, y = stage_population)) +
   geom_line(aes(color = lifestage)) +
   scale_y_log10()
