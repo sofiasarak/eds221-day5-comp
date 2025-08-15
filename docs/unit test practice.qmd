@@ -1,0 +1,60 @@
+---
+title: "Unit Test Practice"
+author: "Sofia Sarak"
+format: html
+editor: visual
+execute:
+  messages: false
+  warnings: false
+  
+---
+
+## Unit testing with the 'testthat' package 
+
+First, install and load necessary packages
+```{r}
+#| include: false
+
+#install.packages("testthat")
+#install.packages("devtools")
+#install.packages("remotes") ; commented out because you don't want R to try to install them every time!!
+
+library(testthat)
+library(devtools)
+library(remotes)
+```
+
+Write a function to practice unit tests.
+
+This function is going to find the mean value of a column, and then return the lowest and highest mean value calculated (in that order).
+
+We would expect:
+- the output is numeric
+- output should be a vector of length 2
+- the first value should be smaller than the second value 
+
+```{r}
+mean_range <- function(df){
+  #return the mean values of each column
+  col_means <- apply(X=df, MARGIN=2, FUN=mean, na.rm=TRUE)
+ 
+  #find minimum and maximum values
+  col_mean_max <- max(col_means)
+  col_mean_min <- min(col_means)
+  
+  #return min and max values, in that order
+  return(c(col_mean_min, col_mean_max))
+}
+
+mean_range(df=mtcars)
+```
+
+Write some unit tests!
+```{r}
+#test that the output is of lenght 2
+expect_length(mean_range(df=mtcars), 2)
+
+#test that first value is less than second value
+expect_true(mean_range(mtcars)[1] < mean_range(mtcars)[2]) #first output of mean_range(mtcars) vs second output of mean_range(mtcars), because it returns a vector!
+```
+
