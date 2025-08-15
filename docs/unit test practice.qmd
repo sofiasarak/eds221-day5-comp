@@ -61,6 +61,8 @@ expect_true(mean_range(mtcars)[1] < mean_range(mtcars)[2]) #first output of mean
 
 
 ## Practice sourcing functions
+
+Custom function example
 ```{r}
 #source our food cart functions
 source(here::here("src","foodcartfunctions.R")) #puts function into our global enviro!
@@ -68,5 +70,14 @@ source(here::here("src","foodcartfunctions.R")) #puts function into our global e
 
 #test running function
 name_cart(food="strawberry", animal="marmot")
+```
+
+Practice with an existing function
+```{r}
+#Source cork oak function
+source(here::here("src", "cork_oak_growth.R"))
+
+#call function
+height_t2(3, 1, 5) #it works! we didn't even write it ourselves
 ```
 
